@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scrollytelling Choropleth</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <script src="https://unpkg.com/scrollama"></script>
+</head>
+<body>
+<header id="intro">
+  <h1>Chicago Peacekeepers & Violent Crime</h1>
+<p>This map explores changes in violent crime across city blocks in Chicago, with a focus on areas supported by community-based peacekeepers. Scroll down to explore the story.</p>
+</header>
+  <main class="scrolly">
+    <div id="vis">
+        <div id="legend-container">
+            <svg id="legend-svg"></svg>
+        </div>
+    </div>
+    <div class="scroll-text">
+      <div class="step" data-step="0">Default map</div>
+      <div class="step" data-step="1">Color by value A</div>
+      <div class="step" data-step="2">Color by value B</div>
+      <div class="step" data-step="3">Color by value C</div>
+      <div class="step" data-step="4">Color by value D</div>
+    </div>
+  </main>
+  <div id="tooltip" style="position: absolute; pointer-events: none;"></div>
+  <script src="script.js"></script>
+</body>
+</html>
