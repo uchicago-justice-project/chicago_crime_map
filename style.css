@@ -66,12 +66,9 @@ body {
   z-index: 1000;
 }
 
-@media (max-width: 768px) {
-  .step {
-    width: 90vw;
-    margin-left: auto;
-    margin-right: auto;
-  }
+#legend-scale {
+  width: 20px;
+  height: 200px;
 }
 
 #legend {
@@ -139,4 +136,25 @@ body {
 #filter-controls button.active {
   background: #333;
   color: white;
+}
+
+
+@media (max-width: 768px) {
+#legend {
+  left: 10px;
+}
+#filter-controls {
+  left: 80px; /* shift it right so it doesn’t sit on the edge */
+}
+
+.step {
+    width: 70vw;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 20px;
+  }
+  .step-text {
+      background: rgba(255, 255, 255, 0.5);
+
+  }
 }

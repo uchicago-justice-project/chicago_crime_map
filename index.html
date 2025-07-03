@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Scrollytelling Choropleth</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="style.css">
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://unpkg.com/scrollama"></script>
@@ -15,7 +16,9 @@
   <main id="scrolly">
     <div id="vis"></div>
     <div id="text">
-      <div class="step" data-step="0">
+    <div class="step" data-step="0">
+    </div>
+      <div class="step" data-step="1">
         <div class="step-text">
             For the first six months of 2025 Chicago has seen a <strong>17.67%</strong> drop in violent crime 
             compared to the first six months of 2024. This map shows the percent difference in violent crime through the first six months
@@ -23,7 +26,7 @@
             areas shaded in red indicate an increase. The deeper the shade, the larger the change.
         </div>
     </div>
-      <div class="step" data-step="1">
+      <div class="step" data-step="2">
         <div class="step-text">
             In September 2024 Chicago cancelled their contract with Shotspotter which installed sensors all over
             Chicago to detect gunshots. Despite a lack of strong evidence in support of Shotspotter's efficacy some
@@ -32,14 +35,14 @@
             decrease in violent crime without those sensors being active, putting them in line with the city wide decrease.
       </div>
     </div>
-      <div class="step" data-step="2">
+      <div class="step" data-step="3">
         <div class="step-text">
             Chicago PD also utilized hotspot analysis to determine what areas to divert more resources to. Many have
             cited this as a possible reason for the decreasing crime rate. The police beats with hotspots saw a 
             decrease of <strong>17.97%</strong> roughly the same as the overall city.
         </div>
     </div>
-     <div class="step" data-step="3">        
+     <div class="step" data-step="4">        
         <div class="step-text">
             In addition to policing measures and surveilance technology, Chicago and the state of Illinois increased
             thier investments in violence prevention programs, in particular Peacekeepers. This program trains community
@@ -47,13 +50,13 @@
             a Peacekeeper hotspot saw a decrease in violent crime of <strong>20.46%</strong>, beating the citywide average.
         </div>
     </div>
-    <div class="step" data-step="4">        
+    <div class="step" data-step="5">        
         <div class="step-text">
             There are of course other things that may contribute to a decrease in violent crime. Use the buttons below to 
             explore the map yourself.
         </div>
     </div>
-      <div class="step last" data-step="5">
+      <div class="step last" data-step="6">
     </div>
     </div>
   </main>
@@ -62,7 +65,7 @@
 <div id="legend">
   <div class="legend-title">Violent Crime<br/> % Change</div>
   <div class="legend-container">
-    <svg id="legend-scale" width="20" height="200"></svg>
+    <svg id="legend-scale"></svg>
     <div class="legend-labels">
       <div class="legend-label" id="legend-max">+100%</div>
       <div class="legend-label" id="legend-zero">0%</div>

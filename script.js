@@ -139,30 +139,30 @@ legendSvg.append("rect")
 });
 
 function updateMap(step, features) {
-  if (step === 0) {
+  if (step === 1) {
     svg.selectAll(".choropleth")
       .transition().duration(300)
       .attr("opacity", 1);
   }
 
-  if (step === 1) {
+  if (step === 2) {
     svg.selectAll(".choropleth")
       .transition().duration(300)
       .attr("opacity", d => d.properties.shotspotter === 1 ? 1 : 0.2);
   }
 
-  if (step === 2) {
+  if (step === 3) {
     svg.selectAll(".choropleth")
       .transition().duration(300)
       .attr("opacity", d => d.properties.hotspot === 1 ? 1 : 0.2);
   }
 
-if (step === 3) {
+if (step === 4) {
     svg.selectAll(".choropleth")
       .transition().duration(300)
       .attr("opacity", d => d.properties.peacekeeper === 1 ? 1 : 0.2);
   }
-  if (step === 4 | step === 5) {
+  if (step === 5 | step === 6) {
     svg.selectAll(".choropleth")
       .transition().duration(300)
       .attr("opacity", 1);
