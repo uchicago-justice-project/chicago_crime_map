@@ -172,6 +172,14 @@ if (step === 4) {
   } else {
     d3.select("#filter-controls").style("display", "none");
   }
+
+  if (step === 0) {
+    d3.select("#legend").transition().duration(300)
+      .style("opacity", 0);
+  } else {
+    d3.select("#legend").transition().duration(300)
+      .style("opacity", 1);
+  }
 }
 
 
