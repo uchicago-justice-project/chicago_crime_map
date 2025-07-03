@@ -10,23 +10,72 @@
 <body>
 <header id="intro">
   <h1>Chicago Peacekeepers & Violent Crime</h1>
-<p>This map explores changes in violent crime across city blocks in Chicago, with a focus on areas supported by community-based peacekeepers. Scroll down to explore the story.</p>
+<p>This map explores changes in violent crime across areas in Chicago, looking specifically at methods the city has implemented or dropped in 2025. Scroll down to explore the story.</p>
 </header>
-  <main class="scrolly">
-    <div id="vis">
-        <div id="legend-container">
-            <svg id="legend-svg"></svg>
+  <main id="scrolly">
+    <div id="vis"></div>
+    <div id="text">
+      <div class="step" data-step="0">
+        <div class="step-text">
+            For the first six months of 2025 Chicago has seen a <strong>17.67%</strong> drop in violent crime 
+            compared to the first six months of 2024. This map shows the percent difference in violent crime through the first six months
+            between 2024 and 2025 aggregated by police beats. Areas shaded in blue indicate a decrease in violent crime, while
+            areas shaded in red indicate an increase. The deeper the shade, the larger the change.
         </div>
     </div>
-    <div class="scroll-text">
-      <div class="step" data-step="0">Default map</div>
-      <div class="step" data-step="1">Color by value A</div>
-      <div class="step" data-step="2">Color by value B</div>
-      <div class="step" data-step="3">Color by value C</div>
-      <div class="step" data-step="4">Color by value D</div>
+      <div class="step" data-step="1">
+        <div class="step-text">
+            In September 2024 Chicago cancelled their contract with Shotspotter which installed sensors all over
+            Chicago to detect gunshots. Despite a lack of strong evidence in support of Shotspotter's efficacy some
+            argued that the cancelation of the contract would increase crime in those areas (largely the south and west 
+            sides of Chicago). However the areas where sensors were located shown here still saw a <strong>17.76%</strong>
+            decrease in violent crime without those sensors being active, putting them in line with the city wide decrease.
+      </div>
+    </div>
+      <div class="step" data-step="2">
+        <div class="step-text">
+            Chicago PD also utilized hotspot analysis to determine what areas to divert more resources to. Many have
+            cited this as a possible reason for the decreasing crime rate. The police beats with hotspots saw a 
+            decrease of <strong>17.97%</strong> roughly the same as the overall city.
+        </div>
+    </div>
+     <div class="step" data-step="3">        
+        <div class="step-text">
+            In addition to policing measures and surveilance technology, Chicago and the state of Illinois increased
+            thier investments in violence prevention programs, in particular Peacekeepers. This program trains community
+            members as outreach workers to prevent violence from occuring in hotspots in their neighborhoods. Areas with
+            a Peacekeeper hotspot saw a decrease in violent crime of <strong>20.46%</strong>, beating the citywide average.
+        </div>
+    </div>
+    <div class="step" data-step="4">        
+        <div class="step-text">
+            There are of course other things that may contribute to a decrease in violent crime. Use the buttons below to 
+            explore the map yourself.
+        </div>
+    </div>
+      <div class="step last" data-step="5">
+    </div>
     </div>
   </main>
+
   <div id="tooltip" style="position: absolute; pointer-events: none;"></div>
+<div id="legend">
+  <div class="legend-title">Violent Crime<br/> % Change</div>
+  <div class="legend-container">
+    <svg id="legend-scale" width="20" height="200"></svg>
+    <div class="legend-labels">
+      <div class="legend-label" id="legend-max">+100%</div>
+      <div class="legend-label" id="legend-zero">0%</div>
+      <div class="legend-label" id="legend-min">–100%</div>
+    </div>
+  </div>
+    <div id="filter-controls">
+        <button data-filter="all">All</button>
+        <button data-filter="peacekeepers">Peacekeepers</button>
+        <button data-filter="hotspot">Hotspots</button>
+        <button data-filter="shotspotter">Shotspotters</button>
+    </div>
+</div>
   <script src="script.js"></script>
 </body>
 </html>
