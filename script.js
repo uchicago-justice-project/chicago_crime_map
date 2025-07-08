@@ -41,7 +41,7 @@ window.addEventListener("resize", () => {
 
   // Color scale
   colorScale = d3.scaleDiverging()
-    .domain([-1, 0, 1])
+    .domain([-0.6, 0, 0.6])
     .interpolator(t => d3.interpolateRdBu(1 - t));
 
 const legendSvg = d3.select("#legend-scale");
@@ -56,9 +56,9 @@ const legendGradient = defs.append("linearGradient")
 
 legendGradient.selectAll("stop")
   .data([
-    { offset: "0%", color: colorScale(-1) },
+    { offset: "0%", color: colorScale(-0.6) },
     { offset: "50%", color: colorScale(0) },
-    { offset: "100%", color: colorScale(1) }
+    { offset: "100%", color: colorScale(0.6) }
   ])
   .enter().append("stop")
   .attr("offset", d => d.offset)
