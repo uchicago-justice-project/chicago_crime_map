@@ -143,6 +143,10 @@ body {
   color: white;
 }
 
+#attribution {
+  margin: 10px;
+  font-size: small;
+}
 
 @media (max-width: 768px) {
 #legend {
@@ -162,4 +166,8 @@ body {
       background: rgba(255, 255, 255, 0.5);
 
   }
+  #attribution {
+    font-size: x-small;
+  }
 }
+
