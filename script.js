@@ -103,8 +103,8 @@ legendSvg.append("rect")
         .style("display", "block")
         .html(`
           <strong>Beat Num:</strong> ${d.properties.beat_num}<br/>
-          <strong>Violent Crimes Jan-Jun 2024:</strong> ${d.properties.VIOLENT_CRIMES_YTD_2024}<br/>
-          <strong>Violent Crimes Jan-Jun 2025:</strong> ${d.properties.VIOLENT_CRIMES_YTD_2025}<br/>
+          <strong>Violent Crimes Jan-Sept 2024:</strong> ${d.properties.VIOLENT_CRIMES_YTD_2024}<br/>
+          <strong>Violent Crimes Jan-Sept 2025:</strong> ${d.properties.VIOLENT_CRIMES_YTD_2025}<br/>
           <strong>Change in Violent Crime:</strong> ${Math.round(d.properties.VIOLENT_CRIMES_PCT_DIFF * 10000) / 100}%<br/>
           <strong>Former Shotspotter:</strong> ${d.properties.shotspotter === 1 ? "Yes" : "No"}<br/>
           <strong>Hotspot:</strong> ${d.properties.hotspot === 1 ? "Yes" : "No"}<br/>
