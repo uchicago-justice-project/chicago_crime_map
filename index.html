@@ -10,10 +10,39 @@
 </head>
 <body>
 <header id="intro">
-  <h1>A deep dive into Chicago’s 2025 Crime Decline (data as of September 22nd 2025)
-</h1>
-<p>For the first nine months of 2025 Chicago saw a <strong>10.96%</strong> drop in violent crime and a <strong>27.76%</strong> drop in homicides compared to the first nine months of 2024. This map explores changes in violent crime across areas in Chicago in 2025. Scroll down to explore the story.</p>
+  <h1>After Shotspotter</h1>
+<p>In September 2024, Chicago ended its contract with ShotSpotter, which had deployed gunshot-detection sensors across much of the city. Critics warned the move would slow police response times and drive up violent crime. The data tells a different story. Comparing 2024, before the shutdown, to the first nine months of 2025, Chicago saw a <strong>10.96%</strong> drop in violent crime and a <strong>27.76%</strong> drop in homicides. Priority 1 emergency response times, the fastest-required responses to the most serious incidents, also improved, especially in beats that formerly had ShotSpotter sensors. Scroll down to explore the story.</p>
 </header>
+  <section id="scrolly-rt">
+    <div id="vis-rt"></div>
+    <div id="text-rt">
+      <div class="step-rt first-rt" data-step-rt="0"></div>
+      <div class="step-rt" data-step-rt="1">
+        <div class="step-text">
+          This map shows how <strong>Priority 1 emergency response times</strong>, the fastest-required responses to the most serious incidents, changed across Chicago police beats after ShotSpotter was shut down in September 2024. <strong>Blue</strong> beats saw faster response times after the shutdown. <strong>Red</strong> beats saw slower response times. Beats that formerly had ShotSpotter sensors are outlined in black.
+        </div>
+      </div>
+      <div class="step-rt" data-step-rt="2">
+        <div class="step-text">
+          Beats that formerly had ShotSpotter sensors (outlined in black) saw an average Priority 1 response time improvement of <strong>4.2 minutes</strong> after ShotSpotter was removed, roughly twice the improvement seen in beats without ShotSpotter. This suggests that officers previously tied up responding to ShotSpotter alerts could now prioritize actual Priority 1 emergency calls.
+        </div>
+      </div>
+      <div class="step-rt last-rt" data-step-rt="3"></div>
+    </div>
+  </section>
+
+  <div id="legend-rt">
+    <div class="legend-title">Response Time<br/>Change (min)</div>
+    <div class="legend-container">
+      <svg id="legend-rt-scale"></svg>
+      <div class="legend-labels">
+        <div class="legend-label" id="legend-rt-max">+10 min</div>
+        <div class="legend-label" id="legend-rt-zero">0</div>
+        <div class="legend-label" id="legend-rt-min">–10 min</div>
+      </div>
+    </div>
+  </div>
+
   <main id="scrolly">
     <div id="vis"></div>
     <div id="text">
