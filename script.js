@@ -183,144 +183,156 @@ Promise.all([
 });
 
 function drawTimeSeries(tsData) {
-  const container = document.getElementById("timeseries-chart");
-  const totalWidth = container.clientWidth;
-  const margin = { top: 30, right: 30, bottom: 60, left: 70 };
-  const chartWidth = totalWidth - margin.left - margin.right;
-  const chartHeight = 300 - margin.top - margin.bottom;
-
   const parseDate = d3.timeParse("%Y-%m-%d");
   tsData.forEach(d => {
     d.date = parseDate(d.period_start);
     d.value = +d.treated_minus_control_diff;
   });
 
-  const chartSvg = d3.select("#timeseries-chart")
-    .append("svg")
-    .attr("width", totalWidth)
-    .attr("height", chartHeight + margin.top + margin.bottom);
-
-  const g = chartSvg.append("g")
-    .attr("transform", `translate(${margin.left},${margin.top})`);
-
-  // Extend x domain slightly for breathing room
-  const dates = tsData.map(d => d.date);
-  const xPad = 15 * 24 * 60 * 60 * 1000; // 15 days in ms
-  const xScale = d3.scaleTime()
-    .domain([new Date(d3.min(dates) - xPad), new Date(d3.max(dates) + xPad)])
-    .range([0, chartWidth]);
-
-  const yScale = d3.scaleLinear()
-    .domain(d3.extent(tsData, d => d.value).map((v, i) => i === 0 ? v - 0.4 : v + 0.4))
-    .nice()
-    .range([chartHeight, 0]);
-
-  // Zero baseline
-  g.append("line")
-    .attr("x1", 0).attr("x2", chartWidth)
-    .attr("y1", yScale(0)).attr("y2", yScale(0))
-    .attr("stroke", "#bbb")
-    .attr("stroke-width", 1)
-    .attr("stroke-dasharray", "4,3");
-
-  g.append("text")
-    .attr("x", chartWidth + 4)
-    .attr("y", yScale(0) + 4)
-    .attr("font-size", "10px")
-    .attr("fill", "#999")
-    .text("baseline");
-
-  // ShotSpotter shutdown line (between period 5 and 6: Sep 22 2024)
   const shutdownDate = new Date("2024-08-22");
-  g.append("line")
-    .attr("x1", xScale(shutdownDate)).attr("x2", xScale(shutdownDate))
-    .attr("y1", 0).attr("y2", chartHeight)
-    .attr("stroke", "#444")
-    .attr("stroke-width", 1.5)
-    .attr("stroke-dasharray", "6,4");
+  const fmt = d3.timeFormat("%b %Y");
 
-  g.append("text")
-    .attr("x", xScale(shutdownDate) + 6)
-    .attr("y", 14)
-    .attr("font-size", "11px")
-    .attr("fill", "#444")
-    .attr("font-style", "italic")
-    .text("ShotSpotter shutdown");
+  function render() {
+    d3.select("#timeseries-chart svg").remove();
 
-  // Line
-  const line = d3.line()
-    .x(d => xScale(d.date))
-    .y(d => yScale(d.value))
-    .curve(d3.curveMonotoneX);
+    const container = document.getElementById("timeseries-chart");
+    const totalWidth = container.clientWidth;
+    const mobile = totalWidth < 500;
 
-  g.append("path")
-    .datum(tsData)
-    .attr("fill", "none")
-    .attr("stroke", "#2166ac")
-    .attr("stroke-width", 2.5)
-    .attr("d", line);
+    const margin = mobile
+      ? { top: 30, right: 12, bottom: 75, left: 55 }
+      : { top: 30, right: 36, bottom: 60, left: 70 };
+    const chartWidth = totalWidth - margin.left - margin.right;
+    const chartHeight = (mobile ? 240 : 300) - margin.top - margin.bottom;
 
-  // Dots
-  g.selectAll("circle")
-    .data(tsData)
-    .enter().append("circle")
-    .attr("cx", d => xScale(d.date))
-    .attr("cy", d => yScale(d.value))
-    .attr("r", 5)
-    .attr("fill", "#2166ac")
-    .attr("stroke", "white")
-    .attr("stroke-width", 1.5)
-    .style("cursor", "pointer")
-    .on("mouseover", function(event, d) {
-      const fmt = d3.timeFormat("%b %Y");
-      const sign = d.value > 0 ? "+" : "";
-      tooltip
-        .style("display", "block")
-        .html(`
-          <strong>${fmt(d.date)}</strong><br/>
-          ShotSpotter vs. control: <strong>${sign}${d.value.toFixed(2)} min</strong>
-        `);
-      d3.select(this).attr("r", 7);
-    })
-    .on("mousemove", function(event) {
-      tooltip
-        .style("left", (event.pageX + 10) + "px")
-        .style("top", (event.pageY - 28) + "px");
-    })
-    .on("mouseout", function() {
-      tooltip.style("display", "none");
-      d3.select(this).attr("r", 5);
-    });
+    const tickValues = mobile
+      ? tsData.filter((d, i) => i % 2 === 0).map(d => d.date)
+      : tsData.map(d => d.date);
 
-  // X axis
-  const xAxis = g.append("g")
-    .attr("transform", `translate(0,${chartHeight})`)
-    .call(d3.axisBottom(xScale)
-      .tickValues(tsData.map(d => d.date))
-      .tickFormat(d => d3.timeFormat("%b '%y")(d3.timeMonth.offset(d, 1))));
+    const chartSvg = d3.select("#timeseries-chart")
+      .append("svg")
+      .attr("width", totalWidth)
+      .attr("height", chartHeight + margin.top + margin.bottom);
 
-  xAxis.selectAll("text")
-    .attr("transform", "rotate(-35)")
-    .attr("text-anchor", "end")
-    .attr("dx", "-0.4em")
-    .attr("dy", "0.6em")
-    .attr("font-size", "11px");
+    const g = chartSvg.append("g")
+      .attr("transform", `translate(${margin.left},${margin.top})`);
 
-  // Y axis
-  g.append("g")
-    .call(d3.axisLeft(yScale)
-      .tickFormat(d => `${d > 0 ? "+" : ""}${d.toFixed(1)} min`)
-      .ticks(6));
+    const xPad = 15 * 24 * 60 * 60 * 1000;
+    const dates = tsData.map(d => d.date);
+    const xScale = d3.scaleTime()
+      .domain([new Date(d3.min(dates) - xPad), new Date(d3.max(dates) + xPad)])
+      .range([0, chartWidth]);
 
-  // Y axis label
-  g.append("text")
-    .attr("transform", "rotate(-90)")
-    .attr("y", -margin.left + 14)
-    .attr("x", -chartHeight / 2)
-    .attr("text-anchor", "middle")
-    .attr("font-size", "12px")
-    .attr("fill", "#444")
-    .text("Minutes vs. baseline (Sep '24)");
+    const yScale = d3.scaleLinear()
+      .domain(d3.extent(tsData, d => d.value).map((v, i) => i === 0 ? v - 0.4 : v + 0.4))
+      .nice()
+      .range([chartHeight, 0]);
+
+    // Zero baseline
+    g.append("line")
+      .attr("x1", 0).attr("x2", chartWidth)
+      .attr("y1", yScale(0)).attr("y2", yScale(0))
+      .attr("stroke", "#bbb")
+      .attr("stroke-width", 1)
+      .attr("stroke-dasharray", "4,3");
+
+    g.append("text")
+      .attr("x", chartWidth + 4)
+      .attr("y", yScale(0) + 4)
+      .attr("font-size", "10px")
+      .attr("fill", "#999")
+      .text("baseline");
+
+    // Shutdown line
+    g.append("line")
+      .attr("x1", xScale(shutdownDate)).attr("x2", xScale(shutdownDate))
+      .attr("y1", 0).attr("y2", chartHeight)
+      .attr("stroke", "#444")
+      .attr("stroke-width", 1.5)
+      .attr("stroke-dasharray", "6,4");
+
+    g.append("text")
+      .attr("x", xScale(shutdownDate) + 5)
+      .attr("y", mobile ? 12 : 14)
+      .attr("font-size", mobile ? "9px" : "11px")
+      .attr("fill", "#444")
+      .attr("font-style", "italic")
+      .text("ShotSpotter shutdown");
+
+    // Line
+    const line = d3.line()
+      .x(d => xScale(d.date))
+      .y(d => yScale(d.value))
+      .curve(d3.curveMonotoneX);
+
+    g.append("path")
+      .datum(tsData)
+      .attr("fill", "none")
+      .attr("stroke", "#2166ac")
+      .attr("stroke-width", 2.5)
+      .attr("d", line);
+
+    // Dots
+    g.selectAll("circle")
+      .data(tsData)
+      .enter().append("circle")
+      .attr("cx", d => xScale(d.date))
+      .attr("cy", d => yScale(d.value))
+      .attr("r", mobile ? 4 : 5)
+      .attr("fill", "#2166ac")
+      .attr("stroke", "white")
+      .attr("stroke-width", 1.5)
+      .style("cursor", "pointer")
+      .on("mouseover", function(event, d) {
+        const sign = d.value > 0 ? "+" : "";
+        tooltip
+          .style("display", "block")
+          .html(`<strong>${fmt(d.date)}</strong><br/>ShotSpotter vs. control: <strong>${sign}${d.value.toFixed(2)} min</strong>`);
+        d3.select(this).attr("r", mobile ? 6 : 7);
+      })
+      .on("mousemove", function(event) {
+        tooltip
+          .style("left", (event.pageX + 10) + "px")
+          .style("top", (event.pageY - 28) + "px");
+      })
+      .on("mouseout", function() {
+        tooltip.style("display", "none");
+        d3.select(this).attr("r", mobile ? 4 : 5);
+      });
+
+    // X axis
+    const xAxis = g.append("g")
+      .attr("transform", `translate(0,${chartHeight})`)
+      .call(d3.axisBottom(xScale)
+        .tickValues(tickValues)
+        .tickFormat(d => d3.timeFormat("%b '%y")(d3.timeMonth.offset(d, 1))));
+
+    xAxis.selectAll("text")
+      .attr("transform", "rotate(-45)")
+      .attr("text-anchor", "end")
+      .attr("dx", "-0.4em")
+      .attr("dy", "0.6em")
+      .attr("font-size", mobile ? "10px" : "11px");
+
+    // Y axis
+    g.append("g")
+      .call(d3.axisLeft(yScale)
+        .tickFormat(d => `${d > 0 ? "+" : ""}${d.toFixed(1)}`)
+        .ticks(mobile ? 4 : 6));
+
+    // Y axis label
+    g.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", -margin.left + 14)
+      .attr("x", -chartHeight / 2)
+      .attr("text-anchor", "middle")
+      .attr("font-size", mobile ? "10px" : "12px")
+      .attr("fill", "#444")
+      .text("Minutes vs. baseline (Sep '24)");
+  }
+
+  render();
+  window.addEventListener("resize", render);
 }
 
 function updateResponseTimeMap(step) {
