@@ -10,41 +10,59 @@
 </head>
 <body>
 <header id="intro">
-  <h1>After Shotspotter</h1>
-<p>In September 2024, Chicago ended its contract with ShotSpotter, which had deployed gunshot-detection sensors across much of the city. Critics warned the move would slow police response times and drive up violent crime. The data tells a different story. Comparing 2024, before the shutdown, to the first nine months of 2025, Chicago saw a <strong>10.96%</strong> drop in violent crime and a <strong>27.76%</strong> drop in homicides. Comparing the 6 month before the shutdown to the first 6 months after, Priority 1 non-gunshot emergency response times also improved in areas that formerly had ShotSpotter sensors. Scroll down to explore the story.</p>
+  <h1>Chicago After Shotspotter</h1>
+<p>In September 2024, Chicago ended its contract with ShotSpotter, which turned off all gunshot-detection sensors across the city. Many warned the move would slow police response times and drive up violent crime. This site uses data obtained via FOIA and the Chicago Data Portal to test these concerns. Priority 1 non-gunshot emergency response times also improved in areas that formerly had ShotSpotter sensors. Scroll down to explore the story. Chicago saw a <strong>10.96%</strong> drop in violent crime and a <strong>27.76%</strong> drop in homicides.</p>
 </header>
   <section id="scrolly-rt">
-    <div id="vis-rt"></div>
+    <div id="vis-rt">
+      <div id="legend-rt">
+        <div class="legend-title">Response Time<br/>Change (min)</div>
+        <div class="legend-container">
+          <svg id="legend-rt-scale"></svg>
+          <div class="legend-labels">
+            <div class="legend-label" id="legend-rt-max">+10 min</div>
+            <div class="legend-label" id="legend-rt-zero">0</div>
+            <div class="legend-label" id="legend-rt-min">–10 min</div>
+          </div>
+        </div>
+      </div>
+    </div>
     <div id="text-rt">
       <div class="step-rt first-rt" data-step-rt="0"></div>
       <div class="step-rt" data-step-rt="1">
         <div class="step-text">
-          This map shows how <strong>Priority 1 emergency response times</strong>, the fastest-required responses to the most serious incidents, changed across Chicago police beats after ShotSpotter was shut down in September 2024. Not included are calls responding to gunshots, due to the way these calls are reported. <strong>Blue</strong> beats saw faster response times after the shutdown. <strong>Red</strong> beats saw slower response times. Beats that formerly had ShotSpotter sensors are outlined in black.
+          This map shows how Priority 1 emergency response times, the fastest-required responses to the most serious incidents, changed across Chicago police beats after ShotSpotter was shut down in September 2024. Blue beats saw faster response times after the shutdown. Red beats saw slower response times. Beats that formerly had ShotSpotter sensors are outlined in black.
         </div>
       </div>
       <div class="step-rt" data-step-rt="2">
         <div class="step-text">
-          Beats that formerly had ShotSpotter sensors (outlined in black) saw an average Priority 1 response time improvement of <strong>4.2 minutes</strong> after ShotSpotter was removed, roughly twice the improvement seen in beats without ShotSpotter. This suggests that officers previously tied up responding to ShotSpotter alerts could now prioritize actual Priority 1 emergency calls.
+          Beats that formerly had ShotSpotter sensors (outlined in black) saw an average Priority 1 response time improvement of <strong>4.2 minutes</strong> after ShotSpotter was removed, roughly twice the improvement seen in beats without ShotSpotter. This suggests that officers previously tied up responding to ShotSpotter alerts could now prioritize Priority 1 emergency calls.
         </div>
       </div>
       <div class="step-rt last-rt" data-step-rt="3"></div>
     </div>
   </section>
 
-  <div id="legend-rt">
-    <div class="legend-title">Response Time<br/>Change (min)</div>
-    <div class="legend-container">
-      <svg id="legend-rt-scale"></svg>
-      <div class="legend-labels">
-        <div class="legend-label" id="legend-rt-max">+10 min</div>
-        <div class="legend-label" id="legend-rt-zero">0</div>
-        <div class="legend-label" id="legend-rt-min">–10 min</div>
+  <main id="scrolly">
+    <div id="vis">
+      <div id="legend">
+        <div class="legend-title">Violent Crime<br/> % Change</div>
+        <div class="legend-container">
+          <svg id="legend-scale"></svg>
+          <div class="legend-labels">
+            <div class="legend-label" id="legend-max">+60%</div>
+            <div class="legend-label" id="legend-zero">0%</div>
+            <div class="legend-label" id="legend-min">–60%</div>
+          </div>
+        </div>
+        <div id="filter-controls">
+          <button data-filter="all">All</button>
+          <button data-filter="peacekeepers">Peacekeepers</button>
+          <button data-filter="hotspot">Hotspots</button>
+          <button data-filter="shotspotter">Shotspotters</button>
+        </div>
       </div>
     </div>
-  </div>
-
-  <main id="scrolly">
-    <div id="vis"></div>
     <div id="text">
     <div class="step first" data-step="0">
     </div>
@@ -76,27 +94,14 @@ Chicago, Cook County, and the State of Illinois have also increased investments 
       <div class="step last" data-step="6">
     </div>
     </div>
-    <div id="attribution">Map produced by David Hackett, Robert Vargas and Max Blasdell</div>
   </main>
 
+  <footer id="page-footer">
+    <div id="footnote">The first map of response times compares the six months right before the shutdown of ShotSpotter in 2024 and the first six months right after the shutdown. These are mean response times by police beat for Priority 1 Calls (the most serious) excluding calls for gunshots. Gunshots were excluded from this analysis due to ambiguity in their source (ShotSpotter initiated calls can later be recoded as non-ShotSpotter calls). The second map compares average crime rates in the first 9 months of 2024 vs the first 9 months of 2025.</div>
+    <div id="attribution">Map produced by David Hackett, Robert Vargas and Max Blaisdell</div>
+  </footer>
+
   <div id="tooltip" style="position: absolute; pointer-events: none;"></div>
-<div id="legend">
-  <div class="legend-title">Violent Crime<br/> % Change</div>
-  <div class="legend-container">
-    <svg id="legend-scale"></svg>
-    <div class="legend-labels">
-      <div class="legend-label" id="legend-max">+60%</div>
-      <div class="legend-label" id="legend-zero">0%</div>
-      <div class="legend-label" id="legend-min">–60%</div>
-    </div>
-  </div>
-    <div id="filter-controls">
-        <button data-filter="all">All</button>
-        <button data-filter="peacekeepers">Peacekeepers</button>
-        <button data-filter="hotspot">Hotspots</button>
-        <button data-filter="shotspotter">Shotspotters</button>
-    </div>
-</div>
   <script src="script.js"></script>
 </body>
 </html>

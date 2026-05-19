@@ -176,6 +176,7 @@ d3.json("beats_with_stats_v2.geojson").then(data => {
     .onStepEnter(response => {
       updateMap(response.index, data.features);
     });
+
 });
 
 
