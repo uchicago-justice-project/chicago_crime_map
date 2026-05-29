@@ -17,8 +17,10 @@ const projection = d3.geoMercator();
 const path = d3.geoPath().projection(projection);
 const tooltip = d3.select("#tooltip");
 let colorScale;
+let colorScaleRT;
+let rtMode = 'before_after';
 
-d3.json("beats_with_stats_v2.geojson").then(data => {
+d3.json("beats_with_stats_v3.geojson").then(data => {
   projection.fitSize([width, height], data);
 
   window.addEventListener("resize", () => {
@@ -31,7 +33,7 @@ d3.json("beats_with_stats_v2.geojson").then(data => {
 
   // --- Response Time Map ---
 
-  const colorScaleRT = d3.scaleDiverging()
+  colorScaleRT = d3.scaleDiverging()
     .domain([-10, 0, 10])
     .interpolator(t => d3.interpolateRdBu(1 - t));
 
@@ -66,16 +68,22 @@ d3.json("beats_with_stats_v2.geojson").then(data => {
     .attr("opacity", 1)
     .on("mouseover", function(event, d) {
       const p = d.properties;
-      const sign = p.diff_u > 0 ? "+" : "";
-      tooltip
-        .style("display", "block")
-        .html(`
-          <strong>Beat:</strong> ${p.beat_num}<br/>
-          <strong>Avg Response Time Before:</strong> ${p.p0_u.toFixed(1)} min<br/>
-          <strong>Avg Response Time After:</strong> ${p.p1_u.toFixed(1)} min<br/>
-          <strong>Change:</strong> ${sign}${p.diff_u.toFixed(1)} min<br/>
-          <strong>Had ShotSpotter:</strong> ${p.shotspotter === 1 ? "Yes" : "No"}
-        `);
+      const signU = p.diff_u > 0 ? "+" : "";
+      const signY = p.diff_2024_2025 > 0 ? "+" : "";
+      tooltip.style("display", "block").html(`
+        <strong>Beat:</strong> ${p.beat_num}<br/>
+        <strong>Had ShotSpotter:</strong> ${p.shotspotter === 1 ? "Yes" : "No"}<br/>
+        <br/>
+        <strong>6-month comparison (before/after shutdown)</strong><br/>
+        <strong>Avg Response Time Before:</strong> ${p.p0_u.toFixed(1)} min<br/>
+        <strong>Avg Response Time After:</strong> ${p.p1_u.toFixed(1)} min<br/>
+        <strong>Change:</strong> ${signU}${p.diff_u.toFixed(1)} min<br/>
+        <br/>
+        <strong>9-month comparison (2024 vs 2025)</strong><br/>
+        <strong>Avg Response Time 2024:</strong> ${p.p2024.toFixed(1)} min<br/>
+        <strong>Avg Response Time 2025:</strong> ${p.p2025.toFixed(1)} min<br/>
+        <strong>Change:</strong> ${signY}${p.diff_2024_2025.toFixed(1)} min
+      `);
       d3.select(this).raise().attr("stroke-width", 2.5);
     })
     .on("mousemove", function(event) {
@@ -185,20 +193,43 @@ function updateResponseTimeMap(step) {
     d3.select("#legend-rt").transition().duration(300).style("opacity", 0);
   }
   if (step === 1) {
+    rtMode = 'before_after';
     d3.select("#legend-rt").transition().duration(300).style("opacity", 1);
     d3.select("#legend").transition().duration(300).style("opacity", 0);
     svgRT.selectAll(".rt-beat")
       .transition().duration(300)
-      .attr("opacity", 1);
+      .attr("opacity", 1)
+      .attr("fill", d => colorScaleRT(d.properties.diff_u));
   }
   if (step === 2) {
+    rtMode = 'before_after';
     d3.select("#legend-rt").transition().duration(300).style("opacity", 1);
     d3.select("#legend").transition().duration(300).style("opacity", 0);
     svgRT.selectAll(".rt-beat")
       .transition().duration(300)
-      .attr("opacity", d => d.properties.shotspotter === 1 ? 1 : 0.2);
+      .attr("opacity", d => d.properties.shotspotter === 1 ? 1 : 0.2)
+      .attr("fill", d => colorScaleRT(d.properties.diff_u));
   }
   if (step === 3) {
+    rtMode = 'year_over_year';
+    d3.select("#legend-rt").transition().duration(300).style("opacity", 1);
+    d3.select("#legend").transition().duration(300).style("opacity", 0);
+    svgRT.selectAll(".rt-beat")
+      .transition().duration(300)
+      .attr("opacity", 1)
+      .attr("fill", d => colorScaleRT(d.properties.diff_2024_2025));
+  }
+  if (step === 4) {
+    rtMode = 'year_over_year';
+    d3.select("#legend-rt").transition().duration(300).style("opacity", 1);
+    d3.select("#legend").transition().duration(300).style("opacity", 0);
+    svgRT.selectAll(".rt-beat")
+      .transition().duration(300)
+      .attr("opacity", d => d.properties.shotspotter === 1 ? 1 : 0.2)
+      .attr("fill", d => colorScaleRT(d.properties.diff_2024_2025));
+  }
+  if (step === 5) {
+    rtMode = 'before_after';
     d3.select("#legend-rt").transition().duration(300).style("opacity", 0);
   }
 }
